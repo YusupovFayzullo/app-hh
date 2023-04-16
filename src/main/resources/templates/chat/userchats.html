@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{fragments :: head(~{::title},~{::link})}">
+    <meta charset="UTF-8">
+    <title>Chats</title>
+    <link href="/css/homepage.css">
+</head>
+<body>
+<section th:replace="~{fragments :: navbar}"></section>
+<div class="container mb-5 col-md-4" th:each="chat : ${chats}">
+    <div class="card mb-4">
+        <div class="card-header">
+            <span th:text="${chat.status.toString().toLowerCase()}" class="text-capitalize"
+                  style="color: blue"></span><br>
+            <a th:href="@{'/chat/message?chatId='+${chat.id}}" th:color="blue" class="link-info"
+               th:text="${chat.vacancy.title}"></a><br>
+<!--            <p sec:authorize="hasAnyRole('EMPLOYER')" th:each="user:${chat.users}" th:if="${!sessionUser.id eq user.id}" th:text="${user.getEmail()}"></p>-->
+            <span th:text="${chat.vacancy.companyName}"></span>
+        </div>
+    </div>
+</div>
+
+<section th:replace="~{fragments :: js_links}"></section>
+</body>
+</html>

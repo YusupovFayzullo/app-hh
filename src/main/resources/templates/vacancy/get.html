@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{fragments :: head(~{::title},~{::link})}">
+    <title>Vacancy Get Page</title>
+    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        /* Remove the margin and padding from the span element */
+        span {
+            margin: 0;
+            padding: 0;
+            color: #bfe2e9;
+        }
+
+        /*!* Set the display property of the span element to inline-block *!*/
+        /*span {*/
+        /*    display: inline-block;*/
+        /*    vertical-align: middle;*/
+        /*}*/
+
+        .container {
+            width: 100%;
+        }
+
+        /* Set the width of the column elements to 30% */
+        .box {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+<section th:insert="fragments :: navbar"></section>
+<div class="container mb-5">
+    <form>
+        <a th:href="@{/home}" class="btn btn-info"> Back</a>
+        <div style="margin-top: 25px">
+            <label for="title" th:color="grey">Job</label>
+            <h3 id="title" style="text-align: center" th:text="${vacancy.getTitle()}"></h3>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="box">
+                <div>
+                    <label for="comanyName" th:color="grey">Company Name</label>
+                    <h4 id="comanyName" th:text="${vacancy.getCompanyName()}"></h4>
+                </div>
+
+                <div>
+                    <label for="app_dedline" th:color="grey">Application Deadline</label>
+                    <h3 id="app_dedline" th:text="${vacancy.getApplication_deadline()}"></h3>
+                </div>
+
+                <div>
+                    <label for="location" th:color="grey">Location</label>
+                    <h4 id="location" th:text="${vacancy.getRegion()}"></h4>
+                </div>
+            </div>
+
+            <div class="box">
+                <div>
+                    <label for="emp_form" th:color="grey">Employment Form</label>
+                    <h4 id="emp_form" th:text="${vacancy.getEmp_form()}"></h4>
+                </div>
+
+                <div>
+                    <label for="emp_type" th:color="grey">Employment Type</label>
+                    <h4 id="emp_type" th:text="${vacancy.getEmp_type()}"></h4>
+                </div>
+
+                <div>
+                    <label for="salary" th:color="grey">Salary </label>
+                    <h3 id="salary"><span th:text="${vacancy.getSalary()}"></span>
+                        <span th:text="${vacancy.getCurrency()}"></span></h3>
+                </div>
+            </div>
+
+            <div class="box">
+                <div>
+                    <label for="edu_level" th:color="grey">Education Level</label>
+                    <h4 id="edu_level" th:text="${vacancy.getEducationLevel()}"></h4>
+                </div>
+
+                <div>
+                    <label for="language" th:color="grey">languagge</label>
+                    <h3 id="language" th:text="${vacancy.getLanguage()}"></h3>
+                </div>
+
+                <div>
+                    <label for="lang_level" th:color="grey">Language Level </label>
+                    <h4 id="lang_level" th:text="${vacancy.getLanguage_level()}"></h4>
+                </div>
+            </div>
+
+            <div class="box">
+                <div>
+                    <label for="experience_year" th:color="grey">Years Of Experience</label>
+                    <h4 id="experience_year" th:text="${vacancy.getExperienceYear()}"></h4>
+                </div>
+
+                <div>
+                    <label for="market" th:color="grey">Market</label>
+                    <h4 id="market" th:text="${vacancy.getMarket()}"></h4>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label for="description" th:color="grey">Description</label>
+                    <h4 id="description" th:text="${vacancy.getDescription()}"></h4>
+                </div>
+            </div>
+        </div>
+
+
+        <th:block sec:authorize="hasAnyRole('EMPLOYER')">
+            <a type="button" class="btn btn-warning" th:href="@{'/vacancy/edit?vacancyId='+${vacancy.getId()}}">
+                Edit </a>
+            <input type="hidden" name="vacancyId" th:value="${vacancy.getId()}">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Delete
+            </button>
+        </th:block>
+    </form>
+    <form sec:authorize="${hasAnyRole('USER')}" method="post" th:action="@{'/chat/create'}">
+        <input type="hidden" th:value="${vacancy.id}" name="vacancyId">
+        <input type="hidden" th:value="'http://localhost:8080/download?id='+${user.id}" name="text">
+        <button type="submit" class="btn btn-success">Apply Now</button>
+    </form>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" th:action="@{'/vacancy/delete?vacancyId='+${vacancy.getId()}}">
+                    <div class="modal-header">
+                        <input type="hidden" name="vacancyId" th:value="${vacancy.getId()}">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Job </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure to delete this vacancy <b th:text="${vacancy.getTitle()}"></b>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-warning">
+                            Yes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section th:replace="fragments :: js_links" ;
+</body>
+</html>

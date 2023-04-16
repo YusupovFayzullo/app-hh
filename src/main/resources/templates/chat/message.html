@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{fragments :: head(~{::title},~{::link})}">
+    <meta charset="UTF-8">
+    <title>Chats</title>
+    <link href="/css/homepage.css">
+</head>
+<body>
+<section th:replace="~{fragments :: navbar}"></section>
+<div class="container col-md-4 col-lg-4 col-sm-2" style="margin-top: 20px">
+    <h4 th:text="${chat.getStatus()}" class="text-danger" sec:authorize="hasAnyRole('USER')"></h4>
+    <th:block th:each="message,cnt : ${chat.messages}">
+<!--                <p th:text="${#dates.format(message,'dd.MM.yyyy HH:mm:ss')}"></p>-->
+        <p><sub> [[${message.createdAt}]] </sub> <br>
+            <a th:if="${cnt.count==1}" th:href="${message.text}" th:text="Resume"></a>
+            <span th:if="${cnt.count!=1}" th:text="${message.text}"></span>
+        </p>
+    </th:block>
+    <form method="post" class="row g-3" th:action="@{'/chat/message?chatId='+${chat.id}}"
+          style="position: absolute;bottom: 30px;left: auto">
+        <div class="col-auto">
+            <label for="InputText" class="visually-hidden">Text</label>
+            <input type="text" class="form-control" id="InputText" name="text" required placeholder="Write something">
+        </div>
+        <div class="col-auto" sec:authorize="hasAnyRole('EMPLOYER')" th:if="${#lists.size(chat.messages) == 1}">
+            <select class="form-select" aria-label="Default select example" name="status">
+                <option th:each="ch_status,cnt : ${T(uz.hh.enums.VacancyStatus).values()}" th:if="${cnt.count == 2}"
+                        selected th:value="${ch_status}" th:text="${ch_status.toString()}"/>
+                <option th:each="ch_status,cnt : ${T(uz.hh.enums.VacancyStatus).values()}" th:if="${cnt.count != 2}"
+                        th:value="${ch_status}" th:text="${ch_status}"/>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Send</button>
+        </div>
+    </form>
+</div>
+<section th:replace="~{fragments :: js_links}"></section>
+</body>
+</html>
