@@ -7,6 +7,6 @@ import java.util.UUID;
 
 public class BaseUtils {
     public static String generateUniqueName(@NonNull String fileName) {
-        return UUID.randomUUID() + "" + StringUtils.getFilenameExtension(fileName);
+        return UUID.randomUUID() + "." + StringUtils.getFilenameExtension(fileName);
     }
 }
