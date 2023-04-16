@@ -83,8 +83,8 @@ public class VacancyController {
     @PreAuthorize("permitAll()")
     public String getVacancy(@RequestParam(name = "vacancyId") String vacancyId, Model model) {
         User user = userSession.getUser();
-        Vacancy vacancy = vacancyService.getById(vacancyId);
-        model.addAttribute("vacancy", vacancy);
+        Vacancy vacancy1 = vacancyService.getById(vacancyId);
+        model.addAttribute("vacancy", vacancy1);
         model.addAttribute("user", user);
         return "vacancy/get";
     }
